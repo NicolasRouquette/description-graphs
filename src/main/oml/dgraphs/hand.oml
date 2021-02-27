@@ -1,0 +1,96 @@
+vocabulary <http://dgraphs/hand> with # as hand {
+
+  concept Part
+
+  relation entity PartOf [
+    from Part
+    to Part
+    forward isPartOf
+    reverse hasPart
+    asymmetric
+    irreflexive
+    functional
+  ]
+
+  relation entity AttachedTo [
+    from Part
+    to Part
+    forward attachedTo
+    symmetric
+    reflexive
+    transitive
+  ]
+
+  concept Hand :> Part [
+    restricts some relation hasPart to IndexFinger // (4,5)
+  ]
+
+  concept Finger :> Part [
+    restricts all relation hasPart to IndexPhalange 
+  ]
+  
+  relation entity PartOf-oif :> PartOf [
+    from IndexPhalange
+    to IndexFinger
+    forward isPartOf-if
+    reverse hasPart-if
+    asymmetric
+    irreflexive
+    functional
+  ]
+
+  relation entity PartOf-oif1 :> PartOf-oif [
+    from Proximal_phalanx_oif
+    to IndexFinger
+    forward isPartOf-if1
+    reverse hasPart-if1
+    asymmetric
+    irreflexive
+    functional
+  ]
+
+  relation entity PartOf-oif2 :> PartOf-oif [
+    from Middle_phalanx_oif
+    to IndexFinger
+    forward isPartOf-if2
+    reverse hasPart-if2
+    asymmetric
+    irreflexive
+    functional
+  ]
+
+  relation entity PartOf-if3 :> PartOf-oif [
+    from Distal_phalanx_oif
+    to IndexFinger
+    forward isPartOf-if3
+    reverse hasPart-if3
+    asymmetric
+    irreflexive
+    functional
+  ]
+
+  concept IndexFinger :> Finger [  
+    restricts some relation hasPart-if1 to Proximal_phalanx_oif // (8)
+    restricts relation hasPart-if1 to max 1 // (15)
+    restricts some relation hasPart-if2 to Middle_phalanx_oif // (7)
+    restricts relation hasPart-if2 to max 1 // (14)
+    restricts some relation hasPart-if3 to Distal_phalanx_oif // (6)
+    restricts relation hasPart-if3 to max 1 // (13)
+  ]
+
+  concept Phalange :> Part
+
+  concept IndexPhalange :> Phalange
+
+  concept Distal_phalanx_oif :> IndexPhalange [ 
+    restricts some relation attachedTo to Middle_phalanx_oif // (9)
+  ]
+  concept Middle_phalanx_oif :> IndexPhalange [ 
+    //restricts some relation attachedTo to Distal_phalanx_oif // (10)
+    restricts some relation attachedTo to Proximal_phalanx_oif // (11)
+  ]
+  concept Proximal_phalanx_oif :> IndexPhalange [ 
+    //restricts some relation attachedTo to Middle_phalanx_oif // (12)
+  ]
+
+}
