@@ -1,0 +1,69 @@
+vocabulary <http://dgraphs/fractures> with # as fractures {
+
+  extends <http://dgraphs/hand>
+
+  aspect BreakablePart
+  concept UnbrokenPart :> BreakablePart
+  concept BrokenPart :> BreakablePart
+
+  ref aspect hand:Part  :> BreakablePart
+
+  concept UnbrokenHand :> hand:Hand, UnbrokenPart
+  concept BrokenHand :> hand:Hand, BrokenPart
+
+  rule unbroken-hand [ hand:Hand(h) ^ UnbrokenPart(h) -> UnbrokenHand(h) ]
+  rule broken-hand [ hand:Hand(h) ^ BrokenPart(h) -> BrokenHand(h) ]
+
+  concept UnbrokenFinger :> hand:Finger, UnbrokenPart
+  concept BrokenFinger :> hand:Finger, BrokenPart
+  
+  rule unbroken-finger [ hand:Finger(h) ^ UnbrokenPart(h) -> UnbrokenFinger(h) ]
+  rule broken-finger [ hand:Finger(h) ^ BrokenPart(h) -> BrokenFinger(h) ]
+
+  concept UnbrokenIndex_finger :> hand:Index_finger, UnbrokenPart
+  concept BrokenIndex_finger :> hand:Index_finger, BrokenPart
+  
+  rule unbroken-index_finger [ hand:Index_finger(h) ^ UnbrokenPart(h) -> UnbrokenIndex_finger(h) ]
+  rule broken-index_finger [ hand:Index_finger(h) ^ BrokenPart(h) -> BrokenIndex_finger(h) ]
+
+  concept UnbrokenPhalange :> hand:Phalange, UnbrokenPart
+  concept BrokenPhalange :> hand:Phalange, BrokenPart
+
+  rule unbroken-phalange [ hand:Phalange(h) ^ UnbrokenPart(h) -> UnbrokenPhalange(h) ]
+  rule broken-phalange [ hand:Phalange(h) ^ BrokenPart(h) -> BrokenPhalange(h) ]
+
+  concept UnbrokenIndexPhalange :> hand:IndexPhalange, UnbrokenPart
+  concept BrokenIndexPhalange :> hand:IndexPhalange, BrokenPart
+
+  rule unbroken-indexphalange [ hand:IndexPhalange(h) ^ UnbrokenPart(h) -> UnbrokenIndexPhalange(h) ]
+  rule broken-indexphalange [ hand:IndexPhalange(h) ^ BrokenPart(h) -> BrokenIndexPhalange(h) ]
+
+  concept UnbrokenDistal_phalanx_oif :> hand:Distal_phalanx_oif, UnbrokenPart
+  concept BrokenDistal_phalanx_oif :> hand:Distal_phalanx_oif, BrokenPart
+
+  rule unbroken-distal_phalanx_oif [ hand:Distal_phalanx_oif(h) ^ UnbrokenPart(h) -> UnbrokenDistal_phalanx_oif(h) ]
+
+  // adding this rule results in an inconsistency for f1.
+  // rule broken-distal_phalanx_oif [ hand:Distal_phalanx_oif(h) ^ BrokenPart(h) -> BrokenDistal_phalanx_oif(h) ]
+
+  concept UnbrokenMiddle_phalanx_oif :> hand:Middle_phalanx_oif, UnbrokenPart
+  concept BrokenMiddle_phalanx_oif :> hand:Middle_phalanx_oif, BrokenPart
+
+  rule unbroken-middle_phalanx_oif [ hand:Middle_phalanx_oif(h) ^ UnbrokenPart(h) -> UnbrokenMiddle_phalanx_oif(h) ]
+  rule broken-middle_phalanx_oif [ hand:Middle_phalanx_oif(h) ^ BrokenPart(h) -> BrokenMiddle_phalanx_oif(h) ]
+
+  concept UnbrokenProximal_phalanx_oif :> hand:Proximal_phalanx_oif, UnbrokenPart
+  concept BrokenProximal_phalanx_oif :> hand:Proximal_phalanx_oif, BrokenPart
+
+  rule unbroken-proximal_phalanx_oif [ hand:Proximal_phalanx_oif(h) ^ UnbrokenPart(h) -> UnbrokenProximal_phalanx_oif(h) ]
+  rule broken-proximal_phalanx_oif [ hand:Proximal_phalanx_oif(h) ^ BrokenPart(h) -> BrokenProximal_phalanx_oif(h) ]
+
+  rule broken-finger-if-broken-phalanx [
+    hand:Finger(f) ^
+    hand:hasPart(f,ph) ^
+    hand:Phalange(ph) ^
+    BrokenPart(ph)
+    ->
+    BrokenPart(f)
+  ]
+}

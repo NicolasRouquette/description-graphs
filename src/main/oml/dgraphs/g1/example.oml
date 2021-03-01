@@ -3,7 +3,7 @@ description <http://dgraphs/g1/example> with # as example {
   uses <http://dgraphs/vbundle>
 
   ci h1 : hand:Hand [
-    hand:id "h1"^^hand:String
+    hand:id "h1"^^xsd:string
     hand:hasPart h1if
   ]
 

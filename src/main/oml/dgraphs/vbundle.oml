@@ -1,3 +1,4 @@
 vocabulary bundle <http://dgraphs/vbundle> with # as vbundle {
   includes <http://dgraphs/hand>
+  includes <http://dgraphs/fractures>
 }

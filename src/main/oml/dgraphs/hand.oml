@@ -1,6 +1,8 @@
 vocabulary <http://dgraphs/hand> with # as hand {
 
-  concept Part
+  extends <http://www.w3.org/2001/XMLSchema>
+  
+  aspect Part
 
   relation entity PartOf [
     from Part
@@ -54,11 +56,9 @@ vocabulary <http://dgraphs/hand> with # as hand {
     restricts relation hasPart to max 1 Index_finger // Axiom (5)
   ]
 
-  scalar String
-
   scalar property id [
     domain Hand
-    range String
+    range xsd:string
     functional
   ]
 

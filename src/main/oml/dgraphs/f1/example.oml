@@ -1,4 +1,4 @@
-description <http://dgraphs/g2/example> with # as example {
+description <http://dgraphs/f1/example> with # as example {
 
   uses <http://dgraphs/vbundle>
 
@@ -19,11 +19,5 @@ description <http://dgraphs/g2/example> with # as example {
   ci h1if-m : hand:Middle_phalanx_oif [
     hand:attachedTo h1if-d
   ]
-  ci h1if-d : hand:Distal_phalanx_oif
-
-  // An individual contains a minCardinality restriction that is greater than a maxCardinality restriction
-  ci h2 : hand:Hand [
-    hand:id "h2"^^xsd:string
-    hand:hasPart h1if
-  ]
+  ci h1if-d : hand:Distal_phalanx_oif, fractures:BrokenPart
 }
