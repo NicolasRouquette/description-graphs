@@ -35,7 +35,7 @@ task omlToOwl(type:io.opencaesar.oml2owl.Oml2OwlTask) {
 /*
  * A task to run the Openllet reasoner on the OWL catalog
  */
-task owlReason(type:io.opencaesar.owl.reason.OwlReasonTask, dependsOn: omlToOwl) {
+task owlVReason(type:io.opencaesar.owl.reason.OwlReasonTask, dependsOn: omlToOwl) {
 	// OWL catalog
 	catalogPath = file('build/owl/catalog.xml')
 	// Input ontology IRI to reason on
@@ -47,14 +47,128 @@ task owlReason(type:io.opencaesar.owl.reason.OwlReasonTask, dependsOn: omlToOwl)
 		'http://dgraphs/vbundle/individuals = ALL_INSTANCE | DATA_PROPERTY_VALUE | OBJECT_PROPERTY_VALUE | SAME_AS'
 	]
 	// Junit error report
-	reportPath = file('build/reports/reasoning.xml')
+	reportPath = file('build/reports/vbundle/reasoning.xml')
+}
+
+// consistent
+task owlG1Reason(type:io.opencaesar.owl.reason.OwlReasonTask, dependsOn: owlVReason) {
+	// OWL catalog
+	catalogPath = file('build/owl/catalog.xml')
+	// Input ontology IRI to reason on
+	inputOntologyIri = 'http://dgraphs/g1/dbundle'
+	// Entailment statements to generate and the ontologies to persist them in
+	specs = [
+		'http://dgraphs/g1/dbundle/classes = ALL_SUBCLASS',
+		'http://dgraphs/g1/dbundle/properties = INVERSE_PROPERTY | ALL_SUBPROPERTY',
+		'http://dgraphs/g1/dbundle/individuals = ALL_INSTANCE | DATA_PROPERTY_VALUE | OBJECT_PROPERTY_VALUE | SAME_AS'
+	]
+	// Junit error report
+	reportPath = file('build/reports/g1/reasoning.xml')
+}
+
+// inconsistent
+task owlG2Reason(type:io.opencaesar.owl.reason.OwlReasonTask, dependsOn: owlVReason) {
+	// OWL catalog
+	catalogPath = file('build/owl/catalog.xml')
+	// Input ontology IRI to reason on
+	inputOntologyIri = 'http://dgraphs/g2/dbundle'
+	// Entailment statements to generate and the ontologies to persist them in
+	specs = [
+		'http://dgraphs/g2/dbundle/classes = ALL_SUBCLASS',
+		'http://dgraphs/g2/dbundle/properties = INVERSE_PROPERTY | ALL_SUBPROPERTY',
+		'http://dgraphs/g2/dbundle/individuals = ALL_INSTANCE | DATA_PROPERTY_VALUE | OBJECT_PROPERTY_VALUE | SAME_AS'
+	]
+	// Junit error report
+	reportPath = file('build/reports/g2/reasoning.xml')
+}
+
+// inconsistent
+task owlG3Reason(type:io.opencaesar.owl.reason.OwlReasonTask, dependsOn: owlVReason) {
+	// OWL catalog
+	catalogPath = file('build/owl/catalog.xml')
+	// Input ontology IRI to reason on
+	inputOntologyIri = 'http://dgraphs/g3/dbundle'
+	// Entailment statements to generate and the ontologies to persist them in
+	specs = [
+		'http://dgraphs/g3/dbundle/classes = ALL_SUBCLASS',
+		'http://dgraphs/g3/dbundle/properties = INVERSE_PROPERTY | ALL_SUBPROPERTY',
+		'http://dgraphs/g3/dbundle/individuals = ALL_INSTANCE | DATA_PROPERTY_VALUE | OBJECT_PROPERTY_VALUE | SAME_AS'
+	]
+	// Junit error report
+	reportPath = file('build/reports/g3/reasoning.xml')
+}
+
+// inconsistent
+task owlG4aReason(type:io.opencaesar.owl.reason.OwlReasonTask, dependsOn: owlVReason) {
+	// OWL catalog
+	catalogPath = file('build/owl/catalog.xml')
+	// Input ontology IRI to reason on
+	inputOntologyIri = 'http://dgraphs/g4a/dbundle'
+	// Entailment statements to generate and the ontologies to persist them in
+	specs = [
+		'http://dgraphs/g4a/dbundle/classes = ALL_SUBCLASS',
+		'http://dgraphs/g4a/dbundle/properties = INVERSE_PROPERTY | ALL_SUBPROPERTY',
+		'http://dgraphs/g4a/dbundle/individuals = ALL_INSTANCE | DATA_PROPERTY_VALUE | OBJECT_PROPERTY_VALUE | SAME_AS'
+	]
+	// Junit error report
+	reportPath = file('build/reports/g4a/reasoning.xml')
+}
+
+// inconsistent
+task owlG4bReason(type:io.opencaesar.owl.reason.OwlReasonTask, dependsOn: owlVReason) {
+	// OWL catalog
+	catalogPath = file('build/owl/catalog.xml')
+	// Input ontology IRI to reason on
+	inputOntologyIri = 'http://dgraphs/g4b/dbundle'
+	// Entailment statements to generate and the ontologies to persist them in
+	specs = [
+		'http://dgraphs/g4b/dbundle/classes = ALL_SUBCLASS',
+		'http://dgraphs/g4b/dbundle/properties = INVERSE_PROPERTY | ALL_SUBPROPERTY',
+		'http://dgraphs/g4b/dbundle/individuals = ALL_INSTANCE | DATA_PROPERTY_VALUE | OBJECT_PROPERTY_VALUE | SAME_AS'
+	]
+	// Junit error report
+	reportPath = file('build/reports/g4b/reasoning.xml')
+}
+
+// inconsistent
+task owlG4cReason(type:io.opencaesar.owl.reason.OwlReasonTask, dependsOn: owlVReason) {
+	// OWL catalog
+	catalogPath = file('build/owl/catalog.xml')
+	// Input ontology IRI to reason on
+	inputOntologyIri = 'http://dgraphs/g4c/dbundle'
+	// Entailment statements to generate and the ontologies to persist them in
+	specs = [
+		'http://dgraphs/g4c/dbundle/classes = ALL_SUBCLASS',
+		'http://dgraphs/g4c/dbundle/properties = INVERSE_PROPERTY | ALL_SUBPROPERTY',
+		'http://dgraphs/g4c/dbundle/individuals = ALL_INSTANCE | DATA_PROPERTY_VALUE | OBJECT_PROPERTY_VALUE | SAME_AS'
+	]
+	// Junit error report
+	reportPath = file('build/reports/g4c/reasoning.xml')
+}
+
+// consistent
+task owlG4dReason(type:io.opencaesar.owl.reason.OwlReasonTask, dependsOn: owlVReason) {
+	// OWL catalog
+	catalogPath = file('build/owl/catalog.xml')
+	// Input ontology IRI to reason on
+	inputOntologyIri = 'http://dgraphs/g4d/dbundle'
+	// Entailment statements to generate and the ontologies to persist them in
+	specs = [
+		'http://dgraphs/g4d/dbundle/classes = ALL_SUBCLASS',
+		'http://dgraphs/g4d/dbundle/properties = INVERSE_PROPERTY | ALL_SUBPROPERTY',
+		'http://dgraphs/g4d/dbundle/individuals = ALL_INSTANCE | DATA_PROPERTY_VALUE | OBJECT_PROPERTY_VALUE | SAME_AS'
+	]
+	// Junit error report
+	reportPath = file('build/reports/g4d/reasoning.xml')
 }
 
 /*
  * A task to build the project, which executes several tasks together
  */
 task build() {
-	dependsOn owlReason
+	dependsOn owlVReason
+	dependsOn owlG1Reason 
+	dependsOn owlG4dReason
 }
 
 /*

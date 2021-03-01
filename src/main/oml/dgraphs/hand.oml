@@ -17,65 +17,61 @@ vocabulary <http://dgraphs/hand> with # as hand {
     to Part
     forward attachedTo
     symmetric
-    reflexive
-    transitive
+
+    // reflexive is too strong in OWL2, see: https://www.w3.org/TR/owl2-syntax/#Reflexive_Object_Properties
+    // It would effectively result in an axiom: SubClassOf( owl:Thing ObjectHasSelf( attachedTo ) )
+    // This would effectively force owl:Thing and Part to become equivalent; which is definitely not intended.
+
+    // transitive results in a complex property that violates the OWL2-DL global restrictions on simple roles
+    // specifically, cardinality restrictions must involve simple object properties.
   ]
 
-  concept Hand :> Part [
-    restricts some relation hasPart to IndexFinger // (4,5)
-  ]
-
-  concept Finger :> Part [
-    restricts all relation hasPart to IndexPhalange 
-  ]
+  // The intended form of reflexivity is this axiom: SubClassOf( Part ObjectHasSelf( attachedTo ) )
+  // OML 0.8.7 does not support this axiom directly but we can emulate it with a SWRL rule.
+  // See option 4 here: https://github.com/opencaesar/oml/issues/64
+  rule attachedTo-reflexive [
+    Part(x) 
+    ->
+    attachedTo(x,x)
+  ] 
   
-  relation entity PartOf-oif :> PartOf [
-    from IndexPhalange
-    to IndexFinger
-    forward isPartOf-if
-    reverse hasPart-if
-    asymmetric
-    irreflexive
+  // This is a rule-based encoding of transitivity to avoid violating the OWL2-DL global restriction on complex properties.
+  // Specifically, attachedTo is not declared transitive so it remains a simple property that can be used in cardinality restriction axioms.
+  // Nonetheless, we emulate the intended semantics of transitivity with a SWRL rule.
+  rule attachedTo-transitive [
+    attachedTo(x,y) ^
+    attachedTo(y,z) ^
+    differentFrom(x,y) ^
+    differentFrom(y,z)
+    ->
+    attachedTo(x,z)
+  ]
+
+  // The axiom numbers correspond to those on p. 1283-4 of the paper.
+  concept Hand :> Part [
+    key id // since id is a functional data property, this axiom forces each unique instance of Hand to have a unique id value.
+    restricts some relation hasPart to Index_finger // Axiom (4)
+    restricts relation hasPart to max 1 Index_finger // Axiom (5)
+  ]
+
+  scalar String
+
+  scalar property id [
+    domain Hand
+    range String
     functional
   ]
 
-  relation entity PartOf-oif1 :> PartOf-oif [
-    from Proximal_phalanx_oif
-    to IndexFinger
-    forward isPartOf-if1
-    reverse hasPart-if1
-    asymmetric
-    irreflexive
-    functional
-  ]
+  concept Finger :> Part
+  
+  concept Index_finger :> Finger [
+    restricts some relation hasPart to Distal_phalanx_oif // Axiom (6)
+    restricts some relation hasPart to Middle_phalanx_oif // Axiom (7)
+    restricts some relation hasPart to Proximal_phalanx_oif // Axiom (8)
 
-  relation entity PartOf-oif2 :> PartOf-oif [
-    from Middle_phalanx_oif
-    to IndexFinger
-    forward isPartOf-if2
-    reverse hasPart-if2
-    asymmetric
-    irreflexive
-    functional
-  ]
-
-  relation entity PartOf-if3 :> PartOf-oif [
-    from Distal_phalanx_oif
-    to IndexFinger
-    forward isPartOf-if3
-    reverse hasPart-if3
-    asymmetric
-    irreflexive
-    functional
-  ]
-
-  concept IndexFinger :> Finger [  
-    restricts some relation hasPart-if1 to Proximal_phalanx_oif // (8)
-    restricts relation hasPart-if1 to max 1 // (15)
-    restricts some relation hasPart-if2 to Middle_phalanx_oif // (7)
-    restricts relation hasPart-if2 to max 1 // (14)
-    restricts some relation hasPart-if3 to Distal_phalanx_oif // (6)
-    restricts relation hasPart-if3 to max 1 // (13)
+    restricts relation hasPart to max 1 Distal_phalanx_oif // Axiom (13)
+    restricts relation hasPart to max 1 Middle_phalanx_oif // Axiom (14)
+    restricts relation hasPart to max 1 Proximal_phalanx_oif // Axiom (15)
   ]
 
   concept Phalange :> Part
@@ -83,14 +79,46 @@ vocabulary <http://dgraphs/hand> with # as hand {
   concept IndexPhalange :> Phalange
 
   concept Distal_phalanx_oif :> IndexPhalange [ 
-    restricts some relation attachedTo to Middle_phalanx_oif // (9)
+    restricts some relation attachedTo to Middle_phalanx_oif // Axiom (9)
+    restricts relation attachedTo to max 1 Middle_phalanx_oif // Axiom (16)
   ]
   concept Middle_phalanx_oif :> IndexPhalange [ 
-    //restricts some relation attachedTo to Distal_phalanx_oif // (10)
-    restricts some relation attachedTo to Proximal_phalanx_oif // (11)
+    restricts some relation attachedTo to Distal_phalanx_oif // Axiom (10)
+    restricts some relation attachedTo to Proximal_phalanx_oif // Axiom (11)
+    restricts relation attachedTo to max 1 Distal_phalanx_oif // Axiom (17)
+    restricts relation attachedTo to max 1 Proximal_phalanx_oif // Axiom (18)
   ]
   concept Proximal_phalanx_oif :> IndexPhalange [ 
-    //restricts some relation attachedTo to Middle_phalanx_oif // (12)
+    restricts some relation attachedTo to Middle_phalanx_oif // Axiom (12)
+    restricts relation attachedTo to max 1 Middle_phalanx_oif // Axiom (19)
   ]
 
+  // These two rules strengthen the knowledge base according to the discussion on p. 1284
+  // to prevent unintended possible models of the knowledge base.
+
+  // This rule captures the fact that a middle phalanx that is
+  // attached to a proximal phalanx part of an index finger
+  // must also be a part of the same index finger.
+  rule middle-attached-to-proximal-is-part [
+    Index_finger(if) ^
+    hasPart(if,p) ^
+    Proximal_phalanx_oif(p) ^
+    attachedTo(p,m) ^
+    Middle_phalanx_oif(m)
+    ->
+    hasPart(if,m)
+  ]
+
+  // This rule captures the fact that a distal phalanx that is
+  // attached to a middle phalanx part of an index finger
+  // must also be a part of the same index finger.
+  rule distal-attached-to-middle-is-part [
+    Index_finger(if) ^
+    hasPart(if,m) ^
+    Middle_phalanx_oif(m) ^
+    attachedTo(m,d) ^
+    Distal_phalanx_oif(d)
+    ->
+    hasPart(if,d)
+  ]
 }

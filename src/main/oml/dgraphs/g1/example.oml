@@ -1,0 +1,23 @@
+description <http://dgraphs/g1/example> with # as example {
+
+  uses <http://dgraphs/vbundle>
+
+  ci h1 : hand:Hand [
+    hand:id "h1"^^hand:String
+    hand:hasPart h1if
+  ]
+
+  ci h1if : hand:Index_finger [
+    hand:hasPart h1if-p
+    hand:hasPart h1if-m
+    hand:hasPart h1if-d
+  ]
+
+  ci h1if-p : hand:Proximal_phalanx_oif [
+    hand:attachedTo h1if-m
+  ]
+  ci h1if-m : hand:Middle_phalanx_oif [
+    hand:attachedTo h1if-d
+  ]
+  ci h1if-d : hand:Distal_phalanx_oif
+}

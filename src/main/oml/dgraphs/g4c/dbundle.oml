@@ -1,0 +1,3 @@
+description bundle <http://dgraphs/g4c/dbundle> with # as dbundle {
+  includes <http://dgraphs/g4c/example>
+}

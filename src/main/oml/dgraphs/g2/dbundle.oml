@@ -1,0 +1,3 @@
+description bundle <http://dgraphs/g2/dbundle> with # as dbundle {
+  includes <http://dgraphs/g2/example>
+}
